@@ -233,7 +233,9 @@ class Analysis(BaseContent):
                 duetime = starttime + max_days
             else:
                 duetime = ''
-            self.setDueDate(duetime)
+            # Only update the due date if not already set
+            if not self.getDueDate():
+                self.setDueDate(duetime)
 
     def getReviewState(self):
         """ Return the current analysis' state"""
