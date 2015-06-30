@@ -33,15 +33,23 @@ def read(context, request):
     catalog = getToolByName(context, catalog_name)
     indexes = catalog.indexes()
 
+    def formatFilter (filterValue):
+      if filterValue == 'true':
+          return True
+      elif request[index] == 'false':
+          return False
+      else:
+          return safe_unicode(filterValue)
+
     contentFilter = {}
     for index in indexes:
         if index in request:
             if index == 'review_state' and "{" in request[index]:
                 continue
-            contentFilter[index] = safe_unicode(request[index])
+            contentFilter[index] = formatFilter(request[index])
         if "%s[]"%index in request:
             value = request["%s[]"%index]
-            contentFilter[index] = [safe_unicode(v) for v in value]
+            contentFilter[index] = [formatFilter(v) for v in value]
 
     if 'limit' in request:
         try:
