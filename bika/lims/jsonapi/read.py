@@ -36,7 +36,7 @@ def read(context, request):
     def formatFilter (filterValue):
       if filterValue == 'true':
           return True
-      elif request[index] == 'false':
+      elif filterValue == 'false':
           return False
       else:
           return safe_unicode(filterValue)
