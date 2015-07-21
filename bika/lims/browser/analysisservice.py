@@ -229,4 +229,4 @@ class JSONReadExtender(object):
                     if method.UID() not in data["MethodInstruments"]:
                         data["MethodInstruments"][method.UID()] = []
                     data["MethodInstruments"][method.UID()].append(
-                        load_field_values(instrument, include_fields=[]))
+                        load_field_values(instrument, include_fields=['uid']))
