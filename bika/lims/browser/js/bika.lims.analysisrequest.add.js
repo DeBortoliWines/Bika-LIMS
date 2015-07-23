@@ -187,6 +187,7 @@ function AnalysisRequestAddView() {
 		var spec_uid = $("#ar_" + column + "_Specification_uid").val();
 		if (spec_uid == "" || spec_uid == undefined || spec_uid == null) {
 			_set_specs(column)
+			return;
 		}
 		var request_data = {
 			catalog_name: 'bika_setup_catalog',
