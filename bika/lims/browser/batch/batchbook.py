@@ -10,7 +10,6 @@ from Products.CMFCore.utils import getToolByName
 
 import re
 
-
 class BatchBookView(BikaListingView):
 
     def __init__(self, context, request):
@@ -116,18 +115,19 @@ class BatchBookView(BikaListingView):
 
         ars = []
 
+        def addActiveAR (ars, ar):
+          if not ar in ars and self.context.portal_workflow.getInfoFor(ar, 'cancellation_state') == 'active':
+            ars.append(ar)
+
         for o in schema.getField('InheritedObjects').get(self.context):
             if o.portal_type == 'AnalysisRequest':
-                if o not in ars:
-                    ars.append(o)
+                addActiveAR(ars,o)
             elif o.portal_type == 'Batch':
                 for ar in o.getAnalysisRequests():
-                    if ar not in ars:
-                        ars.append(ar)
+                  addActiveAR(ars,ar)
 
         for ar in self.context.getAnalysisRequests():
-            if ar not in ars:
-                ars.append(ar)
+            addActiveAR(ars,ar)
 
         self.categories = []
         analyses = {}
