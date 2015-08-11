@@ -263,6 +263,10 @@ class AnalysisRequestWorkflowAction(WorkflowAction):
         # check that the form values match the database
         # save them if not.
         for uid, result in self.request.form.get('Result', [{}])[0].items():
+            # never save any part of rows with empty result values.
+            # https://jira.bikalabs.com/browse/LIMS-1944:
+            if not result:
+                continue
             # if the AR has ReportDryMatter set, get dry_result from form.
             dry_result = ''
             if hasattr(self.context, 'getReportDryMatter') \
