@@ -14,10 +14,6 @@ window.bika.lims.controllers =  {
     "html":
         ['CommonUtils'],
 
-    // Barcode utils
-    ".barcode":
-        ['BarcodeUtils'],
-
     // Calculation utils
     ".ajax_calculate":
         ['CalculationUtils'],

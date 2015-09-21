@@ -50,3 +50,9 @@ function BarcodeUtils() {
         });
     }
 }
+
+// immediately load the BarcodeUtils so that barcode entries are detected
+// in all windows (when there is no input element selected).
+window.bika = window.bika || { lims: {} };
+window.bika.lims['BarcodeUtils'] = new BarcodeUtils();
+window.bika.lims['BarcodeUtils'].load();
