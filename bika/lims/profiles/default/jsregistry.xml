@@ -412,8 +412,6 @@
   <javascript id="++resource++bika.lims.js/referencesample.js" enabled="False"/>
   <javascript id="++resource++bika.lims.js/reports.js" enabled="False"/>
   <javascript id="++resource++bika.lims.js/artemplate.js" enabled="False"/>
-  <javascript id="++resource++bika.lims.js/barcode.js" enabled="False"/>
-  <javascript id="++resource++bika.lims.js/jquery-barcode-2.0.2.js" enabled="False"/>
   <javascript id="++resource++bika.lims.js/jquery-query-2.1.7.js" enabled="False"/>
   <javascript id="++resource++bika.lims.js/jquery-timepicker.js" enabled="False"/>
   <javascript id="++resource++bika.lims.js/jquery.ui.combogrid-1.6.3.js" enabled="False"/>
