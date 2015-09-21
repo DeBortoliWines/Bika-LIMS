@@ -29,4 +29,5 @@ output.xml
 parts
 report.html
 selenium-screenshot*
+/tags
 Thumbs.db
