@@ -176,7 +176,7 @@ class BatchBookView(BikaListingView):
                 'relative_url': ar.absolute_url(),
                 'view_url': ar.absolute_url(),
                 'created': self.ulocalized_time(ar.created()),
-                'sort_key': ar.created(),
+                'sort_key': ar.getDateReceived(),
                 'replace': {
                     'Batch': batchlink,
                     'AnalysisRequest': arlink,
@@ -243,6 +243,8 @@ class BatchBookView(BikaListingView):
         self.categories.sort()
         self.categories = [x[1] for x in self.categories]
 
-        items = sorted(items, key=itemgetter("sort_key"))
+        # Assume null values are newer than ones who aren't.
+        items = sorted([x for x in items if not x["sort_key"] is None], key=itemgetter("sort_key")) + \
+                [x for x in items if x["sort_key"] is None]
 
         return items
