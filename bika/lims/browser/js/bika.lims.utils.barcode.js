@@ -37,17 +37,20 @@ $(document).ready(function(){
             var code = ""
 
             $(window).keypress(function(event) {
-                if (collecting) {
-                    code = code + String.fromCharCode(event.which);
-                } else {
-                    collecting = true;
-                    code = String.fromCharCode(event.which);
-                    setTimeout(function(){
-                        collecting = false;
-                        if (code.length > 2){
-                            redirect(code);
-                        }
-                    }, 500)
+                // We do not want keypresses that were sent to input or textarea
+                if(event.target.tagName == "BODY"){
+                    if (collecting) {
+                        code = code + String.fromCharCode(event.which);
+                    } else {
+                        collecting = true;
+                        code = String.fromCharCode(event.which);
+                        setTimeout(function(){
+                            collecting = false;
+                            if (code.length > 2){
+                                redirect(code);
+                            }
+                        }, 500)
+                    }
                 }
             });
         }
