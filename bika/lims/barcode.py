@@ -1,4 +1,6 @@
 from Products.CMFCore.utils import getToolByName
+from Products.CMFCore.WorkflowCore import WorkflowException
+
 from bika.lims.browser import BrowserView
 from bika.lims.permissions import EditResults
 
@@ -62,15 +64,30 @@ class barcode_entry(BrowserView):
         self.request.RESPONSE.write(json.dumps(value))
 
     def handle_AnalysisRequest(self, instance):
-        """If it's possible to edit results, go directly to manage_results.
-        For other ARs, just the view screen.
+        """Possible redirects for an AR.
+        - If AR is sample_due: receive it before proceeding.
+        - If AR belongs to Batch, redirect to the BatchBook view.
+        - If AR does not belong to Batch:
+            - if permission/workflow permit: go to AR manage_results.
+        - For other ARs, just redirect to the view screen.
         """
+        # - If AR is sample_due: receive it before proceeding.
+        wf = getToolByName(self.context, 'portal_workflow')
+        if wf.getInfoFor(instance, 'review_state') == 'sample_due':
+            try:
+                wf.doActionFor(instance, 'receive')
+            except WorkflowException:
+                pass
+        # - If AR belongs to Batch, redirect to the BatchBook view.
+        batch = instance.getBatch()
+        if batch:
+            return batch.absolute_url() + "/batchbook"
+        # - if permission/workflow permit: go to AR manage_results.
         mtool = getToolByName(self.context, 'portal_membership')
         if mtool.checkPermission(EditResults, instance):
-            url = instance.absolute_url() + '/manage_results'
-        else:
-            url = instance.absolute_url()
-        return url
+            return instance.absolute_url() + '/manage_results'
+        # - For other ARs, just redirect to the view screen.
+        return instance.absolute_url()
 
     def handle_Sample(self, instance):
         """If this sample has a single AR, go there.
