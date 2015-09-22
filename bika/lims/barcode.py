@@ -14,15 +14,24 @@ class barcode_entry(BrowserView):
             plone.protect.CheckAuthenticator(self.request)
             plone.protect.PostOnly(self.request)
         except:
-            return self.return_json({'success': False, 'failure': True})
+            return self.return_json({
+                'success': False,
+                'failure': True,
+                'error': 'Cannot verify authenticator token'})
 
         entry = self.get_entry()
         if not entry:
-            return self.return_json({'success': False, 'failure': True})
+            return self.return_json({
+                'success': False,
+                'failure': True,
+                'error': 'No barcode entry submitted'})
 
         instance = self.resolve_item(entry)
         if not instance:
-            return self.return_json({'success': False, 'failure': True})
+            return self.return_json({
+                'success': False,
+                'failure': True,
+                'error': 'Cannot resolve ID or Title: %s' % entry})
 
         url = getattr(self, 'handle_' + instance.portal_type)(instance) \
             if hasattr(self, 'handle_' + instance.portal_type) \
@@ -34,10 +43,12 @@ class barcode_entry(BrowserView):
             'url': url})
 
     def get_entry(self):
-        return self.request.get('entry', '').replace('*', '')
+        entry = self.request.get('entry', '')
+        entry = entry.replace('*', '')
+        entry = entry.strip()
+        return entry
 
     def resolve_item(self, entry):
-        brains = []
         for catalog in [self.bika_catalog, self.bika_setup_catalog]:
             brains = catalog(title=entry)
             if brains:
