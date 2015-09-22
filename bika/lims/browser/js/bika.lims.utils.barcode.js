@@ -1,58 +1,63 @@
-/**
- * Controller class for barcode utils
- */
-function BarcodeUtils() {
+// This function will redirect based on a barcode sequence.
+//
+// The string is sent to python, who will return a URL, which
+// we will use to set the window location.
+//
+// A barcode may begin and end with '*' but we can't make this
+// assumption about all scanners; so, we will function with a
+// 500ms timeout instead.
 
-    var that = this;
+$(document).ready(function(){
 
-    that.load = function() {
+    function barcode_listener() {
 
-        // if collection gets something worth submitting,
-        // it's sent to utils.barcode_entry here.
-        function redirect(code){
-            $.ajax({
-                type: 'POST',
-                url: 'barcode_entry',
-                data: {'entry':code.replace("*",""),
-                        '_authenticator': $('input[name="_authenticator"]').val()},
-                success: function(responseText, statusText, xhr, $form) {
-                    if (responseText) {
-                        window.location.href = responseText;
+        var that = this;
+
+        that.load = function() {
+
+            // if collection gets something worth submitting,
+            // it's sent to utils.barcode_entry here.
+            function redirect(code){
+                authenticator = $('input[name="_authenticator"]').val();
+                $.ajax({
+                    type: 'POST',
+                    url: 'barcode_entry',
+                    data: {
+                        'entry':code,
+                        '_authenticator': authenticator},
+                    success: function(responseText, statusText, xhr, $form) {
+                        if (responseText.success) {
+                            window.location.href = responseText.url;
+                        }
                     }
-                }
-            });
-        }
+                });
+            }
 
-        var collecting = false;
-        var code = ""
+            var collecting = false;
+            var code = ""
 
-        $(window).keypress(function(event) {
-            if (collecting) {
-                // short-circuit tineout when ending * is reached
-                if (event.which == "42"){
-                    collecting = false;
-                    redirect(code);
-                }
-                code = code + String.fromCharCode(event.which);
-            } else {
-                // valid barcodes will start and end with "*"
-                if (event.which == "42") {
+            $(window).keypress(function(event) {
+                if (collecting) {
+                    code = code + String.fromCharCode(event.which);
+                } else {
                     collecting = true;
                     code = String.fromCharCode(event.which);
                     setTimeout(function(){
-                        if(collecting == true && code != ""){
-                            collecting = false;
+                        collecting = false;
+                        if (code.length > 2){
                             redirect(code);
                         }
                     }, 500)
                 }
-            }
-        });
+            });
+        }
     }
-}
 
-// immediately load the BarcodeUtils so that barcode entries are detected
-// in all windows (when there is no input element selected).
-window.bika = window.bika || { lims: {} };
-window.bika.lims['BarcodeUtils'] = new BarcodeUtils();
-window.bika.lims['BarcodeUtils'].load();
+    // immediately load the barcode_listener so that barcode entries are detected
+    // in all windows (when there is no input element selected).
+    window.bika = window.bika || { lims: {} };
+    window.bika.lims['barcode_listener'] = new barcode_listener();
+    window.bika.lims['barcode_listener'].load();
+
+});
+
