@@ -247,6 +247,8 @@ class AnalysisRequestWorkflowAction(WorkflowAction):
             self.context.plone_utils.addPortalMessage(message, 'info')
             self.request.response.redirect(self.context.absolute_url())
             return
+
+
         # calcs.js has kept item_data and form input interim values synced,
         # so the json strings from item_data will be the same as the form values
         item_data = {}
@@ -333,6 +335,12 @@ class AnalysisRequestWorkflowAction(WorkflowAction):
                     # The current analysis allows the instrument regards
                     # to its analysis service and method?
                     if (instruments[uid]==''):
+                        # if no valid instrument is selected, prompt user
+                        message = _('Please select a valid instrument.')
+                        self.context.plone_utils.addPortalMessage(message, 'info')
+                        self.request.response.redirect(self.context.absolute_url())
+                        return
+                        # DEPRECATED
                         previnstr = analysis.getInstrument()
                         if previnstr:
                             previnstr.removeAnalysis(analysis)
