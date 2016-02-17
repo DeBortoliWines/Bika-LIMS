@@ -134,8 +134,40 @@ function AnalysisRequestViewView() {
                     }
                 }
             });
+
+
         }
 
+        // now check if existing analysis results state
+        check_analysis_state();
+
+    }
+
+    function check_analysis_state() {
+        var state = getUrlParameter('state[]');
+        if (state !== undefined) {
+            uids = state.replace(']', '').replace('[', '').replace('+', '').split(','); // strip all array delimeters
+            for (idx in uids) {
+                var uid = uids[idx].replace('\'', '').replace('\'', ''); // need to strip string delimeters aswell :(
+                console.log('#lab_analyses_cb_' + uid); 
+                $('#lab_analyses_cb_' + uid).prop('checked', true);
+            }
+        }
+    }
+
+    function getUrlParameter(sParam) {
+        var sPageURL = decodeURIComponent(window.location.search.substring(1)),
+            sURLVariables = sPageURL.split('&'),
+            sParameterName,
+            i;
+
+        for (i = 0; i < sURLVariables.length; i++) {
+            sParameterName = sURLVariables[i].split('=');
+
+            if (sParameterName[0] === sParam) {
+                return sParameterName[1] === undefined ? true : sParameterName[1];
+            }
+        }
     }
 }
 

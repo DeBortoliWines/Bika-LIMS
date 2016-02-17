@@ -1,0 +1,4 @@
+/* hide Plone portalMessage errors, rendered as Growl notifications instead */
+dl.portalMessage.error {
+	display: none !important;
+}

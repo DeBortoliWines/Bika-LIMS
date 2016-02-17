@@ -3,6 +3,17 @@
 
   <!-- Third-party libs first, always -->
   <javascript authenticated="False"
+              id="++resource++bika.lims.js/thirdparty/jquery/jquery-growl.js"
+              cacheable="True"
+              compression="safe"
+              conditionalcomment=""
+              cookable="True"
+              enabled="on"
+              expression=""
+              inline="False"
+              insert-after="*"/>
+
+  <javascript authenticated="False"
               id="++resource++bika.lims.js/thirdparty/jquery/jquery-query-2.1.7.js"
               cacheable="True"
               compression="safe"
@@ -84,6 +95,18 @@
               />
 
   <!-- Bika LIMS javascripts -->
+  <javascript authenticated="False"
+              id="++resource++bika.lims.js/bika.lims.utils.growl.js"
+              cacheable="True"
+              compression="safe"
+              conditionalcomment=""
+              cookable="True"
+              enabled="on"
+              expression=""
+              inline="False"
+              insert-after="*"
+              />
+
   <javascript authenticated="False"
               id="++resource++bika.lims.js/bika.lims.common.js"
               cacheable="True"

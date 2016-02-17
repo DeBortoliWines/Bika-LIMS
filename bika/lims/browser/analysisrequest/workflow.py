@@ -22,6 +22,7 @@ from Products.CMFPlone.utils import safe_unicode, _createObjectByType
 import json
 import plone
 import zope.event
+from urllib import urlencode
 
 
 class AnalysisRequestWorkflowAction(WorkflowAction):
@@ -337,8 +338,9 @@ class AnalysisRequestWorkflowAction(WorkflowAction):
                     if (instruments[uid]==''):
                         # if no valid instrument is selected, prompt user
                         message = _('Please select a valid instrument.')
-                        self.context.plone_utils.addPortalMessage(message, 'info')
-                        self.request.response.redirect(self.context.absolute_url())
+                        self.context.plone_utils.addPortalMessage(message, 'error')
+                        params = {'state[]': [uid for uid, analysis in selected_analyses.items()]}
+                        self.request.response.redirect(self.context.absolute_url() + '?' + urlencode(params))
                         return
                         # DEPRECATED
                         previnstr = analysis.getInstrument()
@@ -387,7 +389,8 @@ class AnalysisRequestWorkflowAction(WorkflowAction):
             #             can_submit = False
             #             break
             if can_submit and analysis not in submissable:
-                submissable.append(analysis)
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                         
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                 submissable.append(analysis)
         # and then submit them.
         for analysis in submissable:
             doActionFor(analysis, 'submit')

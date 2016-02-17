@@ -17,6 +17,14 @@
     rendering="link"
     insert-before="*"/>
 
+
+<stylesheet
+    id="++resource++bika.lims.css/hide_portalmessage.css"
+    media="screen"
+    rel="stylesheet"
+    rendering="link"
+    insert-before="*"/>
+
 <stylesheet
     id="bika_listing.css"
     media="screen"
@@ -48,6 +56,13 @@
 <!-- Overwrite default jqueryui.css -->
 <stylesheet
     id="++resource++jquery-ui-themes/sunburst/jqueryui.css"
+    media="screen"
+    rel="stylesheet"
+    rendering="link"
+    insert-after="*"/>
+
+<stylesheet
+    id="++resource++bika.lims.css/jquery.growl.css"
     media="screen"
     rel="stylesheet"
     rendering="link"
