@@ -149,7 +149,7 @@ function AnalysisRequestViewView() {
             uids = state.replace(']', '').replace('[', '').replace('+', '').split(','); // strip all array delimeters
             for (idx in uids) {
                 var uid = uids[idx].replace('\'', '').replace('\'', ''); // need to strip string delimeters aswell :(
-                console.log('#lab_analyses_cb_' + uid); 
+                    
                 $('#lab_analyses_cb_' + uid).prop('checked', true);
             }
         }
