@@ -3,7 +3,7 @@
 
   <!-- Third-party libs first, always -->
   <javascript authenticated="False"
-              id="++resource++bika.lims.js/thirdparty/jquery/jquery-growl.js"
+              id="++resource++bika.lims.js/thirdparty/jquery/jquery.growl.js"
               cacheable="True"
               compression="safe"
               conditionalcomment=""
