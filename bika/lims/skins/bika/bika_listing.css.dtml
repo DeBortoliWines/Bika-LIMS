@@ -515,6 +515,13 @@ tfoot td.batching a {
   border-right: &dtml-borderWidth; &dtml-borderStyle; &dtml-borderColor;;
 }
 
+/* error/warning styles for batchbook */
+.outofrange-error {
+  background-color: #FDABAB;
+}
+.outofrange-warning {
+  background-color: #FFF8C7;
+}
 
 /* </dtml-with> */
 

@@ -7,6 +7,7 @@ from bika.lims.browser.bika_listing import BikaListingView
 from bika.lims.permissions import EditResults, AddAnalysisRequest, \
     ManageAnalysisRequests
 from Products.CMFCore.utils import getToolByName
+from bika.lims.browser.referenceanalysis import ResultOutOfRange, styleForResultOutOfRange
 
 import re
 
@@ -193,6 +194,7 @@ class BatchBookView(BikaListingView):
                 'ClientOrderNumber': ar.getClientOrderNumber(),
                 'AnalysisRequest': '',
                 'state_title': state_title,
+                'specification': ar.getResultsRange(),
             }
             items.append(item)
 
@@ -225,8 +227,23 @@ class BatchBookView(BikaListingView):
                             self.insert_submit_button = True
 
                     value = analysis.getResult()
+                    resultrange = items[i]['specification']
                     items[i][keyword] = value
                     items[i]['class'][keyword] = ''
+
+                    roo = ResultOutOfRange(self.context)
+                    isOutOfRange = getattr(roo, 'isOutOfRange')
+                    for rr_dict in resultrange:
+                        # Value can not be an empty string either
+                        if rr_dict['keyword'] == keyword and not value == '':
+                            # !! Ensure value is passed as float to isOutOfRange or it will fail every comparison
+                            outofrange, acceptable, o_spec = isOutOfRange(float(value), rr_dict)
+                            alerts = styleForResultOutOfRange({
+                                'out_of_range': outofrange,
+                                'acceptable': acceptable,
+                                'spec_values': o_spec
+                            })
+                            items[i]['class'][keyword] = alerts['class'] if 'class' in alerts else ''
 
                     if value or (edit and not calculation):
 

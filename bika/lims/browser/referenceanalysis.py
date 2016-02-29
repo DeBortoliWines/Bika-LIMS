@@ -66,6 +66,38 @@ class ResultOutOfRangeIcons(object):
         return alerts
 
 
+def styleForResultOutOfRange(ret):
+    """ Helper method for returning a class that represents out of range
+    results for views such as BatchBook that use styles instead of icons
+    """
+    alerts = {}
+    
+    spec = ret["spec_values"]
+    if spec:
+        rngstr = " ({0} {1}, {2}, {3})".format(
+            t(_("min")), str(spec['min']),
+            t(_("max")), str(spec['max']))
+    else:
+        rngstr = ""
+    if ret["out_of_range"]:
+        if ret["acceptable"]:
+            message = "{0}{1}".format(
+                t(_('Result in shoulder range')),
+                rngstr)
+            css_class = 'outofrange-warning'
+        else:
+            message = "{0}{1}".format(
+                t(_('Result out of range')),
+                rngstr)
+            css_class = 'outofrange-error'
+        alerts = {
+                'class': css_class,
+                'msg': message,
+                'field': 'Result',
+            }
+    return alerts
+
+
 class ResultOutOfRange(object):
     """An icon provider for Analyses: Result field out-of-range alerts
     """
@@ -114,6 +146,7 @@ class ResultOutOfRange(object):
             spec_max = float(specification['max'])
         except ValueError:
             spec_max = None
+
         if spec_min == 0 and spec_max == 0 and result != 0:
             # Value has to be zero
             outofrange, acceptable, o_spec = True, False, specification
