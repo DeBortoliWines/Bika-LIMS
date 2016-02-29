@@ -195,6 +195,8 @@ class BatchBookView(BikaListingView):
                 'AnalysisRequest': '',
                 'state_title': state_title,
                 'specification': ar.getResultsRange(),
+                'Remarks': ar.getRemarks(),
+                'ShowRemarks': True,
             }
             items.append(item)
 
