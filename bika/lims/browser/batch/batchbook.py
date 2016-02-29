@@ -237,13 +237,17 @@ class BatchBookView(BikaListingView):
                         # Value can not be an empty string either
                         if rr_dict['keyword'] == keyword and not value == '':
                             # !! Ensure value is passed as float to isOutOfRange or it will fail every comparison
-                            outofrange, acceptable, o_spec = isOutOfRange(float(value), rr_dict)
-                            alerts = styleForResultOutOfRange({
-                                'out_of_range': outofrange,
-                                'acceptable': acceptable,
-                                'spec_values': o_spec
-                            })
-                            items[i]['class'][keyword] = alerts['class'] if 'class' in alerts else ''
+                            try:
+                                outofrange, acceptable, o_spec = isOutOfRange(float(value), rr_dict)
+                                alerts = styleForResultOutOfRange({
+                                    'out_of_range': outofrange,
+                                    'acceptable': acceptable,
+                                    'spec_values': o_spec
+                                })
+                                items[i]['class'][keyword] = alerts['class'] if 'class' in alerts else ''
+                            # Ignore any literals that aren't floats, i.e. packaging date/non-standard values
+                            except ValueError:
+                                continue
 
                     if value or (edit and not calculation):
 
