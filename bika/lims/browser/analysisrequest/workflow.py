@@ -261,8 +261,8 @@ class AnalysisRequestWorkflowAction(WorkflowAction):
                         item_data[i] = d
             else:
                 item_data = json.loads(form['item_data'])
-        pr = cProfile.Profile()
-        pr.enable()
+        # pr = cProfile.Profile()
+        # pr.enable()
         selected_analyses = WorkflowAction._get_selected_items(self)
         results = {}
         hasInterims = {}
@@ -403,12 +403,12 @@ class AnalysisRequestWorkflowAction(WorkflowAction):
         else:
             self.destination_url = self.context.absolute_url()
             
-        pr.disable()
-        s = StringIO.StringIO()
-        sortby = 'cumulative'
-        ps = pstats.Stats(pr, stream=s).sort_stats(sortby)
-        ps.print_stats()
-        print s.getvalue()
+        # pr.disable()
+        # s = StringIO.StringIO()
+        # sortby = 'cumulative'
+        # ps = pstats.Stats(pr, stream=s).sort_stats(sortby)
+        # ps.print_stats()
+        # print s.getvalue()
 
         self.request.response.redirect(self.destination_url)
 
