@@ -588,7 +588,7 @@ Table cells for each column from in review_state's column list.
     <!-- Row Remarks field (for Analyses) -->
     <tal:remarks_condition
         tal:define="remarksenabled python:view.context.bika_setup.getEnableAnalysisRemarks();
-                    isanalysis python:'obj' in item and item['obj'].portal_type == 'Analysis' or item.get('ShowRemarks', False);
+                    isanalysis python:'obj' in item and item['obj'].portal_type == 'Analysis';
                     hasremarks python:True if item.get('Remarks','') else False;
                     remarksedit python: remarksenabled and 'Remarks' in item.get('allow_edit',[]);
                     showremarks python:isanalysis and (hasremarks or remarksedit)
@@ -629,6 +629,56 @@ Table cells for each column from in review_state's column list.
             </td>
         </tr>
     </tal:remarks_condition>
+
+    <!-- Row Remarks field (for Batchbook only) -->
+    <tal:batchbook_remarks_condition
+        tal:define="remarksenabled python:view.context.bika_setup.getEnableAnalysisRemarks();
+                    isbatchbook python:item.get('BatchBookRemarks', False);
+                    hasremarks python:True if item.get('Remarks','') else False;
+                    remarksedit python: remarksenabled and 'Remarks' in item.get('allow_edit',[]);
+                    showremarks python:isbatchbook and (hasremarks or remarksedit)
+                                    and (item.has_key('id') and item.get('category', 'None') == cat);">
+
+        <tr tal:condition="showremarks"
+            tal:define="keyword python:item.has_key('Keyword') and item['Keyword'] or '';"
+            tal:attributes="cat cat;
+                        class item/table_row_class;
+                        id string:folder-contents-item-${item/uid};
+                        uid item/uid;
+                        keyword keyword;"
+            style="border-bottom: 1px solid #ddd;">
+
+            <td tal:attributes="class string:${item/state_class} result single-expanded"></td>
+
+            <td tal:attributes="colspan python:int(nr_cols)-1;
+                                class string:${item/state_class} result remarks"
+                style="padding-right:10px;padding-bottom:5px;">
+                <span i18n:translate="" style='color:#3f3f3f;font-size:0.95em;'>Remarks:</span>&nbsp;
+                <textarea
+                    style="font-size: 0.9em;color:#3f3f3f;width:100%;display:block;"
+                    autocomplete="off"
+                    rows="1"
+                    tal:condition="python:remarksedit==True"
+                    tal:attributes="
+                        class python:'listing_remarks';
+                        tabindex tabindex/next;
+                        uid string:${item/uid};
+                        st_uid string:${item/st_uid|nothing};
+                        objectId string:${item/id};
+                        name string:Remarks.${item/uid}:records;
+                        value python:item.get('Remarks', '');"></textarea>
+
+            <tal:remarks repeat="remark python:item.get('Remarks', [])">
+                <span
+                    style="font-size: 0.9em;color:#3f3f3f;"
+                    autocomplete="off"
+                    tal:condition="python:remarksedit==False"
+                    tal:content="remark"/>
+                    <br/>
+            </tal:remarks>
+            </td>
+        </tr>
+    </tal:batchbook_remarks_condition>
 
     </tal:items>
 </tal:cats>

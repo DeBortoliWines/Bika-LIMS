@@ -166,6 +166,9 @@ class BatchBookView(BikaListingView):
             state_title = wf.getTitleForStateOnType(
                 review_state, 'AnalysisRequest')
 
+            remarks = ar.getRemarks()
+            # format remarks a little better
+            remarks = remarks.split('===')
             item = {
                 'obj': ar,
                 'id': ar.id,
@@ -195,8 +198,8 @@ class BatchBookView(BikaListingView):
                 'AnalysisRequest': '',
                 'state_title': state_title,
                 'specification': ar.getResultsRange(),
-                'Remarks': ar.getRemarks(),
-                'ShowRemarks': True,
+                'Remarks': remarks if not remarks == [''] else False,
+                'BatchBookRemarks': True,
             }
             items.append(item)
 

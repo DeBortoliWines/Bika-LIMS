@@ -309,6 +309,17 @@ th.expanded {
   border:1px solid #CCCCCC !important;
 }
 
+td.single-collapsed {
+  background:  url(treeCollapsed.png) no-repeat 6px 50% !important;
+  cursor:pointer !important;
+  height: 10px;
+}
+td.single-expanded {
+  background: url(treeExpanded.png) no-repeat 6px 50% !important;
+  cursor:pointer !important;
+  height: 10px;
+}
+
 
 
 /*

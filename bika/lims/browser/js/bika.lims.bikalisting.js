@@ -111,6 +111,16 @@ function BikaListingTableView() {
             $(this).removeClass("expanded") .addClass("collapsed");
         });
 
+        // expand/collapse single row (used in batchbook for remarks)
+        $('.bika-listing-table td.single-collapsed').live("click", function() {
+            $(this).nextAll("td").toggle(true);
+            $(this).removeClass("single-collapsed").addClass("single-expanded");
+        });
+        $('.bika-listing-table td.single-expanded').live("click", function() {
+            $(this).nextAll("td").toggle(false);
+            $(this).removeClass("single-expanded").addClass("single-collapsed");
+        });
+
         // always select checkbox when selectable listing item is changed
         $(".listing_select_entry").live("change", function(){
             form_id = $(this).parents("form").attr("id");
