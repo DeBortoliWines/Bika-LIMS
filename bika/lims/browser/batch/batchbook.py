@@ -42,7 +42,10 @@ class BatchBookView(BikaListingView):
                 'index': 'id',
                 'sortable': True,
             },
-
+            'DateReceived': {
+                'title': _('Date Received'),
+                'sortable': True,
+            },
             'SampleType': {
                 'title': _('Sample Type'),
                 'sortable': True,
@@ -71,6 +74,7 @@ class BatchBookView(BikaListingView):
              'title': _('All'),
              'contentFilter': {},
              'columns': ['AnalysisRequest',
+                         'DateReceived',
                          'ClientOrderNumber',
                          'SampleType',
                          'SamplePoint',
@@ -169,6 +173,7 @@ class BatchBookView(BikaListingView):
             remarks = ar.getRemarks()
             # format remarks a little better
             remarks = remarks.split('===')
+            date_receieved = ar.getDateReceived().asdatetime().strftime('%d/%m/%y %T') if ar.getDateReceived() is not None else ''
             item = {
                 'obj': ar,
                 'id': ar.id,
@@ -196,6 +201,7 @@ class BatchBookView(BikaListingView):
                 'SampleType': ar.getSampleType().Title() if ar.getSampleType() else '',
                 'ClientOrderNumber': ar.getClientOrderNumber(),
                 'AnalysisRequest': '',
+                'DateReceived': date_receieved,
                 'state_title': state_title,
                 'specification': ar.getResultsRange(),
                 'Remarks': remarks if not remarks == [''] else False,
