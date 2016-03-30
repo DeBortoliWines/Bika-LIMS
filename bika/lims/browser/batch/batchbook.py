@@ -169,7 +169,7 @@ class BatchBookView(BikaListingView):
             review_state = wf.getInfoFor(ar, 'review_state')
             state_title = wf.getTitleForStateOnType(
                 review_state, 'AnalysisRequest')
-
+            
             remarks = ar.getRemarks()
             # format remarks a little better
             remarks = remarks.split('===')
