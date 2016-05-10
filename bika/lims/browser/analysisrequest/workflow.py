@@ -23,7 +23,7 @@ import json
 import plone
 import zope.event
 from urllib import urlencode
-import cProfile, pstats, os, inspect
+import cProfile, pstats, StringIO
 
 
 class AnalysisRequestWorkflowAction(WorkflowAction):
@@ -240,9 +240,6 @@ class AnalysisRequestWorkflowAction(WorkflowAction):
             self.request.response.redirect(self.destination_url)
 
     def workflow_action_submit(self):
-        pr = cProfile.Profile()
-        pr.enable()
-        # START PROFILING
         form = self.request.form
         rc = getToolByName(self.context, REFERENCE_CATALOG)
         action, came_from = WorkflowAction._get_form_workflow_action(self)
@@ -264,7 +261,8 @@ class AnalysisRequestWorkflowAction(WorkflowAction):
                         item_data[i] = d
             else:
                 item_data = json.loads(form['item_data'])
-
+        # pr = cProfile.Profile()
+        # pr.enable()
         selected_analyses = WorkflowAction._get_selected_items(self)
         results = {}
         hasInterims = {}
@@ -348,10 +346,10 @@ class AnalysisRequestWorkflowAction(WorkflowAction):
                         self.request.response.redirect(self.context.absolute_url() + '?' + urlencode(params))
                         return
                         # DEPRECATED
-                        # previnstr = analysis.getInstrument()
-                        # if previnstr:
-                        #     previnstr.removeAnalysis(analysis)
-                        # analysis.setInstrument(None);
+                        previnstr = analysis.getInstrument()
+                        if previnstr:
+                            previnstr.removeAnalysis(analysis)
+                        analysis.setInstrument(None);
                     elif analysis.isInstrumentAllowed(instruments[uid]):
                         previnstr = analysis.getInstrument()
                         if previnstr:
@@ -404,15 +402,13 @@ class AnalysisRequestWorkflowAction(WorkflowAction):
             self.destination_url = self.context.absolute_url() + "/manage_results"
         else:
             self.destination_url = self.context.absolute_url()
-
-        # STOP PROFILING, SAVE RESULTS
-        pr.disable()
-        f = open("/".join(os.path.abspath(inspect.stack()[0][1]).split('/')[:-7]) + "/var/log/cprofile.log", "a")
-        if f is not None:
-            f.write(self.context.Title() + "\n")
-            sortby = 'cumtime'
-            ps = pstats.Stats(pr, stream=f).sort_stats(sortby)
-            ps.print_stats()
+            
+        # pr.disable()
+        # s = StringIO.StringIO()
+        # sortby = 'cumulative'
+        # ps = pstats.Stats(pr, stream=s).sort_stats(sortby)
+        # ps.print_stats()
+        # print s.getvalue()
 
         self.request.response.redirect(self.destination_url)
 
