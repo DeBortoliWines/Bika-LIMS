@@ -23,7 +23,7 @@ import json
 import plone
 import zope.event
 from urllib import urlencode
-import cProfile, pstats, os, inspect
+# import cProfile, pstats, os, inspect
 
 
 class AnalysisRequestWorkflowAction(WorkflowAction):
@@ -240,9 +240,9 @@ class AnalysisRequestWorkflowAction(WorkflowAction):
             self.request.response.redirect(self.destination_url)
 
     def workflow_action_submit(self):
-        pr = cProfile.Profile()
-        pr.enable()
-        # START PROFILING
+        # pr = cProfile.Profile()
+        # pr.enable()
+        # # START PROFILING
         form = self.request.form
         rc = getToolByName(self.context, REFERENCE_CATALOG)
         action, came_from = WorkflowAction._get_form_workflow_action(self)
@@ -406,13 +406,13 @@ class AnalysisRequestWorkflowAction(WorkflowAction):
             self.destination_url = self.context.absolute_url()
 
         # STOP PROFILING, SAVE RESULTS
-        pr.disable()
-        f = open("/".join(os.path.abspath(inspect.stack()[0][1]).split('/')[:-7]) + "/var/log/cprofile.log", "a")
-        if f is not None:
-            f.write(self.context.Title() + "\n")
-            sortby = 'cumtime'
-            ps = pstats.Stats(pr, stream=f).sort_stats(sortby)
-            ps.print_stats()
+        # pr.disable()
+        # f = open("/".join(os.path.abspath(inspect.stack()[0][1]).split('/')[:-7]) + "/var/log/cprofile.log", "a")
+        # if f is not None:
+        #     f.write(self.context.Title() + "\n")
+        #     sortby = 'cumtime'
+        #     ps = pstats.Stats(pr, stream=f).sort_stats(sortby)
+        #     ps.print_stats()
 
         self.request.response.redirect(self.destination_url)
 
