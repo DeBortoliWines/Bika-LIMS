@@ -20,30 +20,12 @@ class Sticker(BrowserView):
         else:
             self.items = [self.context,]
 
-        # ARs get labels for their respective samples.
-        new_items = []
-        for i in self.items:
-            if i.portal_type == 'AnalysisRequest':
-                new_items.append(i.getSample())
-            else:
-                new_items.append(i)
-        self.items = new_items
-
-        # Samples get labels for their partitions.
-        new_items = []
-        for i in self.items:
-            if i.portal_type == 'Sample':
-                new_items += i.objectValues('SamplePartition')
-            else:
-                new_items.append(i)
-        self.items = new_items
-
         if not self.items:
             logger.warning("Cannot print labels: no items specified in request")
             self.request.response.redirect(self.context.absolute_url())
             return
 
-        if self.items[0].portal_type == 'SamplePartition':
+        if self.items[0].portal_type == 'AnalysisRequest':
             if self.request.get('size', '') == 'small':
                 return self.sample_small()
             else:
