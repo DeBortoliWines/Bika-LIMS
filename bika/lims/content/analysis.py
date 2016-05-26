@@ -57,7 +57,7 @@ def RequestUID(instance):
 
 @indexer(IAnalysis)
 def ResultCaptureDate(instance):
-    return instance.getResultCaptureDate()
+    return DateTime(instance.getResultCaptureDate())
 
 schema = BikaSchema.copy() + Schema((
     HistoryAwareReferenceField('Service',
