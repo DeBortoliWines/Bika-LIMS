@@ -101,6 +101,9 @@ schema = BikaSchema.copy() + Schema((
             visible=False,
         ),
     ),
+    ComputedField('InstrumentUID',
+        expression = 'context.getInstrument().UID() if context.getInstrument() else None',
+    ),
     ComputedField('ServiceUID',
         expression = "context.getService() and context.getService().UID() or ''",
         widget = ComputedWidget(

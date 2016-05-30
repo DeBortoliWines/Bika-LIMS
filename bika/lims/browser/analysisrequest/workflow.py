@@ -344,18 +344,8 @@ class AnalysisRequestWorkflowAction(WorkflowAction):
                         params = {'state[]': [uid for uid, analysis in selected_analyses.items()]}
                         self.request.response.redirect(self.context.absolute_url() + '?' + urlencode(params))
                         return
-                        # DEPRECATED
-                        previnstr = analysis.getInstrument()
-                        if previnstr:
-                            previnstr.removeAnalysis(analysis)
-                        analysis.setInstrument(None);
                     elif analysis.isInstrumentAllowed(instruments[uid]):
-                        previnstr = analysis.getInstrument()
-                        if previnstr:
-                            previnstr.removeAnalysis(analysis)
                         analysis.setInstrument(instruments[uid])
-                        instrument = analysis.getInstrument()
-                        instrument.addAnalysis(analysis)
 
             # Need to save the method?
             if uid in methods and analysis_active:

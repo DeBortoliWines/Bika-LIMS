@@ -6,15 +6,6 @@ import Missing
 from pprint import pprint
 from DateTime import DateTime
 
-# Return these index names as field names instead
-METADATA_FIELD_MAPPING = {
-    'getClientReference': 'ClientReference',
-    'getRequestID': 'RequestID',
-    'getSamplePointTitle': 'SamplePointTitle',
-    'getClientOrderNumber': 'ClientOrderNumber',
-    'getResultCaptureDate': 'ResultCaptureDate',
-}
-
 def handle_errors(f):
     """ simple JSON error handler
     """
@@ -78,7 +69,6 @@ def load_brain_metadata(proxy, include_fields, catalog=None):
                         continue
                     if 'DateTime' in str(val.__class__):
                         val = str(val)
-                        pprint(val)
 
                     json.dumps(val)
                 except:
@@ -86,12 +76,6 @@ def load_brain_metadata(proxy, include_fields, catalog=None):
  
                 ret[index] = val
 
-        # Don't do any mapping outside of API read calls
-        if catalog is not None:
-            # Replace index names with mapped field names
-            if index in METADATA_FIELD_MAPPING:
-                ret[METADATA_FIELD_MAPPING[index]] = ret.pop(index)
-            
     return ret
 
 
