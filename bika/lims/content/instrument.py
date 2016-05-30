@@ -469,6 +469,8 @@ class Instrument(ATFolder):
         if targetuid != self.UID():
             raise Exception("Invalid instrument")
         uid = analysis.UID()
+        rc = getToolByName(self, 'reference_catalog')
+        refs = rc({'UID': uid})
         ans = [a for a in self.getRawAnalyses() if a != uid]
         self.setAnalyses(ans)
         self.cleanReferenceAnalysesCache()
