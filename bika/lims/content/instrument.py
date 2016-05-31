@@ -322,7 +322,7 @@ class Instrument(ATFolder):
                                     getInstrumentUID=self.UID(),
                                     getServiceUID=servUID,
                                     getReferenceType=refType,
-                                    sort_on="ResultCaptureDate",
+                                    sort_on="getResultCaptureDate",
                                     sort_order="descending",
                                     sort_limit=1)[:1]
                   
@@ -443,8 +443,8 @@ class Instrument(ATFolder):
         bac = getToolByName(self, 'bika_analysis_catalog');
         results = bac(portal_type="ReferenceAnalysis",
                       getInstrumentUID=self.UID(),
-		                  getResultCaptureDate=last_month_q,
-                      sort_on="ResultCaptureDate",
+                      getResultCaptureDate=last_month_q,
+                      sort_on="getResultCaptureDate",
                       sort_order="descending")
 
         return [brain.getObject() for brain in results]
