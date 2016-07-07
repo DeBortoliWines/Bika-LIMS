@@ -112,5 +112,9 @@ def create_analysisrequest(
                 if state == 'to_be_preserved':
                     workflow.doActionFor(part, 'preserve')
 
+    # Re-indexed newly completed Analysis Request to make sure
+    # indexes that would of failed earlier, get properly indexed now
+    ar.reindexObject()
+
     # Return the newly created Analysis Request
     return ar

@@ -40,7 +40,7 @@ from zope.interface import implements
 import datetime
 import math
 
-# Indexers for computed fields
+# Indexers for some fields
 @indexer(IAnalysis)
 def Priority(instance):
     priority = instance.getPriority()
@@ -48,8 +48,13 @@ def Priority(instance):
         return priority.getSortKey()
 
 @indexer(IAnalysis)
-def ServiceTitle(instance):
-    return instance.getService().Title()
+def ServiceUID(instance):
+    # Check to see if both analysis and service are instantiated
+    # before attempting to index, because create methods notify
+    # indexer before these objects are ready
+    if instance is not None:
+        if instance.getService() is not None:
+            return instance.getService().UID()
 
 @indexer(IAnalysis)
 def RequestUID(instance):
@@ -57,7 +62,12 @@ def RequestUID(instance):
 
 @indexer(IAnalysis)
 def ResultCaptureDate(instance):
-    return DateTime(instance.getResultCaptureDate())
+    try:
+        print('indexed: %r' % instance)
+        return instance.getResultCaptureDate()
+    except Exception as e:
+        print('index fail: %r' % e)
+    return ''
 
 schema = BikaSchema.copy() + Schema((
     HistoryAwareReferenceField('Service',
@@ -196,7 +206,8 @@ schema = BikaSchema.copy() + Schema((
     ),
     ComputedField('InstrumentValid',
         expression = 'context.isInstrumentValid()'
-    ),
+    ), 
+
 ),
 )
 
@@ -301,6 +312,10 @@ class Analysis(BaseContent):
         # Always update ResultCapture date when this field is modified
         self.setResultCaptureDate(DateTime())
         self.getField('Result').set(self, value, **kw)
+        # Reindex new ResultcaptureDate
+        bac = getToolByName(self, 'bika_analysis_catalog')
+        bac.reindexObject(self)
+
 
     def getSample(self):
         # ReferenceSample cannot provide a 'getSample'
