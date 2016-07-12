@@ -409,6 +409,7 @@ class Create(object):
             )
             for analysis in new_analyses:
                 analysis.setSamplePartition(part)
+                analysis.reindexObject()
 
         # If Preservation is required for some partitions,
         # and the SamplingWorkflow is disabled, we need
