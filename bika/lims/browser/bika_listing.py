@@ -649,8 +649,8 @@ class BikaListingView(BrowserView):
             path = hasattr(obj, 'getPath') and obj.getPath() or \
                  "/".join(obj.getPhysicalPath())
 
-            if hasattr(obj, 'getObject'):
-                obj = obj.getObject()
+            if hasattr(obj, 'UID'):
+                uid = obj.UID
 
             # check if the item must be rendered or not (prevents from
             # doing it later in folderitems) and dealing with paging
@@ -662,8 +662,11 @@ class BikaListingView(BrowserView):
             # we only take allowed items into account
             current_index += 1
             if not show_all and not (start <= current_index <= end):
-                results.append(dict(path = path, uid = obj.UID()))
+                results.append(dict(path = path, uid = uid))
                 continue
+
+            if hasattr(obj, 'getObject'):
+                obj = obj.getObject()
 
             uid = obj.UID()
             title = obj.Title()

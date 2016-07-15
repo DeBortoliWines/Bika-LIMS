@@ -292,7 +292,7 @@ class WorksheetFolderListingView(BikaListingView):
         # this cannot be setup in contentFilter,
         # because AuthenticatedMember is not available in __init__
         if self.selected_state == 'mine' or self.restrict_results == True:
-            analyst = obj.getAnalyst().strip()
+            analyst = obj.getObject().getAnalyst().strip()
             if analyst != _c(self.member.getId()):
                 return False
 
