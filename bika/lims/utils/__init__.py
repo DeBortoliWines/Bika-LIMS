@@ -15,6 +15,7 @@ from Products.CMFPlone.utils import safe_unicode
 from zope.component import queryUtility
 from zope.i18n import translate
 from zope.i18n.locales import locales
+import Missing
 import App
 import Globals
 import os
@@ -514,3 +515,24 @@ def format_supsub(text):
         out.append(subsup.pop())
 
     return ''.join(out)
+
+def get_metadata(brain, index, catalog):
+    """ Used to gracefully retrieve metadata in cases
+    where the value is stored in the index but the metadata
+    has not been properly updated. This happens to a few indexes.
+    """
+
+    if not brain[index] is None and brain[index] != Missing.Value:
+        return brain[index]
+    else:
+        val = catalog._catalog.getIndex(index).getEntryForObject(brain.getRID(), default=None)
+
+        # Parse certain index types as readable metadata
+        if 'BooleanIndex' in str(catalog._catalog.getIndex(index).__class__):
+            val = True if val else False
+        elif 'DateIndex' in str(catalog._catalog.getIndex(index).__class__):
+            # Ignore dates since they use Zope timestamp conversion and not standard UTC timestamps
+            # Return metadata instead
+            return brain[index]
+
+        return val
