@@ -387,10 +387,7 @@ class AnalysisRequestWorkflowAction(WorkflowAction):
             doActionFor(analysis, 'submit')
         message = PMF("Changes saved.")
         self.context.plone_utils.addPortalMessage(message, 'info')
-        if checkPermission(EditResults, self.context):
-            self.destination_url = self.context.absolute_url() + "/manage_results"
-        else:
-            self.destination_url = self.context.absolute_url()
+        self.destination_url = self.context.absolute_url()
 
         # STOP PROFILING, SAVE RESULTS
         # pr.disable()

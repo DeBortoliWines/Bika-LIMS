@@ -82,10 +82,7 @@ class barcode_entry(BrowserView):
         batch = instance.getBatch()
         if batch:
             return batch.absolute_url() + "/batchbook"
-        # - if permission/workflow permit: go to AR manage_results.
-        mtool = getToolByName(self.context, 'portal_membership')
-        if mtool.checkPermission(EditResults, instance):
-            return instance.absolute_url() + '/manage_results'
+        
         # - For other ARs, just redirect to the view screen.
         return instance.absolute_url()
 

@@ -530,10 +530,7 @@ class AnalysisRequestsView(BikaListingView):
             obj = items[x]['obj']
             sample = obj.getSample()
 
-            if getSecurityManager().checkPermission(EditResults, obj):
-                url = obj.absolute_url() + "/manage_results"
-            else:
-                url = obj.absolute_url()
+            url = obj.absolute_url()
 
             items[x]['Client'] = obj.aq_parent.Title()
             if (hideclientlink is False):
