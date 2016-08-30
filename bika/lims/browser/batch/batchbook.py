@@ -8,7 +8,6 @@ from bika.lims.permissions import EditResults, AddAnalysisRequest, \
     ManageAnalysisRequests
 from Products.CMFCore.utils import getToolByName
 from bika.lims.browser.referenceanalysis import ResultOutOfRange, styleForResultOutOfRange
-
 import re
 
 class BatchBookView(BikaListingView):

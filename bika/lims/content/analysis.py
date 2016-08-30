@@ -829,6 +829,12 @@ class Analysis(BaseContent):
                 if can_submit:
                     workflow.doActionFor(dependent, "submit")
 
+        # An analysis should always have an analyst
+        # I.e. in cases where analysis context isn't fully represented (BatchBook)
+        mt = getToolByName(self, "portal_membership")
+        if self.getAnalyst() is None or self.getAnalyst() == '':
+            self.setAnalyst(mt.getAuthenticatedMember().getUserName())
+
         # If all analyses in this AR have been submitted
         # escalate the action to the parent AR
         if not skip(ar, "submit", peek=True):

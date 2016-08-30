@@ -166,6 +166,7 @@ class WorkflowAction:
             if method and not callable(method):
                 raise Exception("Shouldn't Happen: %s.%s not callable." %
                                 (self, method_name))
+
             if method:
                 method()
             else:

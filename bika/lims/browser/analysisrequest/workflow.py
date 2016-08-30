@@ -326,6 +326,7 @@ class AnalysisRequestWorkflowAction(WorkflowAction):
         # discover which items may be submitted
         submissable = []
         for uid, analysis in selected_analyses.items():
+
             analysis_active = isActive(analysis)
 
             # Need to save the instrument?
@@ -385,6 +386,7 @@ class AnalysisRequestWorkflowAction(WorkflowAction):
         # and then submit them.
         for analysis in submissable:
             doActionFor(analysis, 'submit')
+
         message = PMF("Changes saved.")
         self.context.plone_utils.addPortalMessage(message, 'info')
         self.destination_url = self.context.absolute_url()
