@@ -27,6 +27,15 @@ $(document).ready(function(){
 		{'_authenticator': $('input[name="_authenticator"]').val()}
 	);
 
+	if($("#archetypes-fieldname-Remarks fieldset span").length == 0) {
+		// remarks not being rendered, assumes closed workflow
+		$(".viewRemarks").before("<fieldset style='margin-top:2em;'><legend>History</legend></fieldset>");
+		$(".viewRemarks").css('margin-top', '');
+		$(".viewRemarks").load(
+			$('#setRemarksURL').val() + "/getRemarksField",
+			{'_authenticator': $('input[name="_authenticator"]').val()}
+		);
+	}
 });
 });
 

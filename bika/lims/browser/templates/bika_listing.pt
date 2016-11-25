@@ -50,8 +50,12 @@
 	<tal:hasremarks tal:condition="python:hasattr(context.aq_inner, 'Remarks')">
 		<tal:remarks define="
 			field python:context.Schema()['Remarks'];
-			errors python:{};">
-			<p style="margin-top:2em;"/>
+			errors python:{};"><script src="bika_widgets/remarks.js" type="text/javascript"></script>
+          <input type="hidden"
+            id="setRemarksURL"
+            tal:attributes="value python:context.absolute_url()"/>
+		  <input tal:replace="structure context/@@authenticator/authenticator"/>
+			<p style="margin-top:2em;" class="viewRemarks"/>
 			 <metal:widget use-macro="python:context.widget('Remarks', mode='edit')" />
 		</tal:remarks>
 	</tal:hasremarks>
