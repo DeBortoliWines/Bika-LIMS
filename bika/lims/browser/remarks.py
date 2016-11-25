@@ -31,3 +31,15 @@ class ajaxSetRemarks(BrowserView):
         self.context.setRemarks(divider + value + existing, mimetype='text/x-web-intelligent')
 
         return remarks.strip()
+
+class ajaxGetRemarks(BrowserView):
+    """ Return a properly formatted set of remarks when loading remarks value
+    """
+
+    def __call__(self):
+        plone.protect.CheckAuthenticator(self.request)
+        field = self.context.Schema()["Remarks"]
+        existing = self.context.getRemarks(mimetype='text/x-web-intelligent').strip()
+        remarks = convertWebIntelligentPlainTextToHtml(existing)
+
+        return remarks.strip()

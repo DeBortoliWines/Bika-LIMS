@@ -22,6 +22,10 @@ $(document).ready(function(){
 		return false;
 	});
 	$("#Remarks").empty();
+	$("#archetypes-fieldname-Remarks fieldset span").load(
+		$('#setRemarksURL').val() + "/getRemarksField",
+		{'_authenticator': $('input[name="_authenticator"]').val()}
+	);
 
 });
 });
