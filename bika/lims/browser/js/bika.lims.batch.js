@@ -55,5 +55,11 @@ function BatchFolderView() {
                return false;
            }
         });
+
+        $('a').each(function() {
+              $(this).attr("href", function(index, old) {
+                    return old.replace("analysisrequests", "batchbook");
+              });
+        });
     }
 }
