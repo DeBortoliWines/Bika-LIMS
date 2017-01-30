@@ -23,6 +23,7 @@ import json
 import plone
 import zope.event
 from urllib import urlencode
+from pprint import pprint
 
 
 class AnalysisRequestWorkflowAction(WorkflowAction):
@@ -409,12 +410,18 @@ class AnalysisRequestWorkflowAction(WorkflowAction):
         self.workflow_action_publish()
 
     def workflow_action_publish(self):
+        workflow = getToolByName(self.context, 'portal_workflow')
         action, came_from = WorkflowAction._get_form_workflow_action(self)
         if not isActive(self.context):
             message = _('Item is inactive.')
             self.context.plone_utils.addPortalMessage(message, 'info')
             self.request.response.redirect(self.context.absolute_url())
             return
+
+        group = self.context.getSubGroup()
+        if group.Title() == 'Ex - Line':
+            changeWorkflowState(self.context.getBatch(), 'bika_batch_workflow', 'closed')
+
         # AR publish preview
         self.request.response.redirect(self.context.absolute_url() + "/publish")
 
