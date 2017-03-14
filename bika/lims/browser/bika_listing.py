@@ -31,6 +31,8 @@ from zope.component._api import getMultiAdapter
 from zope.i18nmessageid import MessageFactory
 from zope.interface import implements
 from zope.interface import Interface
+from bika.lims.utils import changeWorkflowState
+from pprint import pprint
 
 import App
 import json
@@ -200,8 +202,22 @@ class WorkflowAction:
                     success, message = doActionFor(item, action)
                     if success:
                         transitioned.append(item.id)
+                        if 'AnalysisRequest' in str(item) and not item.getBatch() is None:
+                            group = item.getSubGroup()
+                            status = workflow.getStatusOf("bika_ar_workflow", item)
+                            if group.Title() == 'Ex - Line' and status['review_state'] == 'published':
+                                batch_obj = item.getBatch()
+                                other_ars = batch_obj.getBackReferences("AnalysisRequestBatch")
+                                close = True
+                                for ar in other_ars:
+                                    status = workflow.getStatusOf("bika_ar_workflow", ar)
+                                    if status['review_state'] != 'published' and status['review_state'] != 'invalid':
+                                        close = False
+                                if close:
+                                    changeWorkflowState(batch_obj, 'bika_batch_workflow', 'closed')
                     else:
                         self.context.plone_utils.addPortalMessage(message, 'error')
+
         # automatic label printing
         if transitioned and action == 'receive' \
             and 'receive' in self.portal.bika_setup.getAutoPrintLabels():

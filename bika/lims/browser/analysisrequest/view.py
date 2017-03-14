@@ -142,6 +142,13 @@ class AnalysisRequestViewView(BrowserView):
                         mapping={'retracted_request_id': par.getRequestID()})
             self.addMessage(message, 'info')
 
+        if not ar.getBatch() is None:
+            batch_title =  ar.getBatch().Title()
+            if '(' in batch_title:
+                self.alc_percent = "(" + batch_title[batch_title.find("(")+1:batch_title.find(")")] + ")"
+            else:
+                self.alc_percent = None
+
         # reindex AR if saving
         if "form.button.save" in self.request.form:
             ar.reindexObject()
