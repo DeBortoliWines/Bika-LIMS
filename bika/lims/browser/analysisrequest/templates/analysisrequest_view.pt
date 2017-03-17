@@ -12,7 +12,7 @@
     <h1>
         <img tal:condition="view/icon | nothing"
             src="" tal:attributes="src view/icon"/>
-        <span class="documentFirstHeading" tal:content="python: context.id if not view.alc_percent else context.id + ' ' + view.alc_percent"></span>
+        <span class="documentFirstHeading" tal:content="python: context.id if not getattr(view, 'alc_percent', None) else context.id + ' ' + view.alc_percent"></span>
         <span class="barcode" tal:attributes="value context/id"></span>
 		<img tal:condition="python:context.getSample().getSampleType().getHazardous()"
 			title="Hazardous"
